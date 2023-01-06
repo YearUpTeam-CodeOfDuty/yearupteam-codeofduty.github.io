@@ -7,10 +7,12 @@ window.onload = function () {
     document.getElementById("logout").onclick = logout;
     document.getElementById("postBtn").onclick = postBtnOnClick;
     showPosts();
+    randomName();
+
 
     // displayRandomNames();
-    // displayNews();
-    // setInterval(displayNews, 10000);
+    displayNews();
+    setInterval(displayNews, 10000);
 }
 
 window.addEventListener('scroll', () => {
@@ -32,6 +34,22 @@ window.addEventListener('scroll', () => {
 //     });
 // }
 
+// function getUserFullName(){
+//     let opt = {
+//         headers: {
+//             "Content-Type": "application/json",
+//             "Authorization": `Bearer ${(loginData()).token}`
+//         },
+//     };
+//     fetch(`${api}/api/users`, opt)
+//         .then(res => res.json())
+//         .then(x => {
+//             for(let i = 0; i < x.length; i++) {
+//                 console.log(x[i].fullName);
+//             }
+//         });
+// }
+
 function showPosts() {
     let opt = {
         headers: {
@@ -43,7 +61,7 @@ function showPosts() {
     fetch(`${api}/api/posts?limit=5&offset=${addOffset()}`, opt)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+            // console.log(data);
             for (let i = 0; i < data.length; i++) {
                 displayCard(data[i]);
             }
@@ -82,7 +100,7 @@ function displayCard(data) {
             <h4 class="card-title"> <span><svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
             <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
             <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
-            </svg></span> ${data.username} <span style="color: #999999; font-size: medium;">@${data.username}</span> <span style="color: #999999; font-size: x-small;"> Posted On:${data.createdAt}</span></h4>
+            </svg></span> @${data.username} <span style="color: #999999; font-size: x-small;"> Posted On:${data.createdAt}</span></h4>
             <p class="card-text">${data.text}</p>
         </div>
         <div class="card-footer bg-transparent">
@@ -141,30 +159,56 @@ function addOffset() {
     return offset;
 }
 
-// function displayNews() {
-//     let displayNews = document.getElementById("displayNews");
+function displayNews() {
+    let displayNews = document.getElementById("displayNews");
 
-//     fetch("https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=6be45ffc50ba48769b02fe10f8c5cb69")
-//         .then(response => response.json())
-//         .then(data => {
-//             let newsHTML = "";
-//             let articleCount = Math.min(data.articles.length, 2);
-//             for (let i = 0; i < articleCount; i++) {
-//                 let articleIndex = Math.floor(Math.random() * data.articles.length);
-//                 let article = data.articles[articleIndex];
-//                 newsHTML += `
-//             <div class="article">
-//               <img src="${article.urlToImage}" alt="${article.title}" style="height: 100px; width: 200px;">
-//               <p>${article.title}</p>
-//             </div>
-//           `;
-//                 if (i < articleCount - 1) {
-//                     newsHTML += "<hr>";
-//                 }
-//             }
-//             displayNews.innerHTML = newsHTML;
-//         })
-//         .catch(error => {
-//             console.error("There was an error fetching the news articles:", error);
-//         });
-// }
+    fetch("https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=6be45ffc50ba48769b02fe10f8c5cb69")
+        .then(response => response.json())
+        .then(data => {
+            let newsHTML = "";
+            let articleCount = Math.min(data.articles.length, 2);
+            for (let i = 0; i < articleCount; i++) {
+                let articleIndex = Math.floor(Math.random() * data.articles.length);
+                let article = data.articles[articleIndex];
+                newsHTML += `
+            <div class="article">
+              <img src="${article.urlToImage}" alt="${article.title}" style="height: 100px; width: 200px;">
+              <p>${article.title}</p>
+            </div>
+          `;
+                if (i < articleCount - 1) {
+                    newsHTML += "<hr>";
+                }
+            }
+            displayNews.innerHTML = newsHTML;
+        })
+        .catch(error => {
+            console.error("There was an error fetching the news articles:", error);
+        });
+}
+
+function randomName(){
+    let randomName = document.getElementById("randomName");
+    let randomName1 = document.getElementById("randomName1");
+    let randomName2 = document.getElementById("randomName2");
+  
+    fetch("https://jsonplaceholder.typicode.com/users")
+    .then(response => response.json()) 
+    .then(data => {
+     
+      let randomIndex = Math.floor(Math.random() * data.length);
+      let randomIndex1 = Math.floor(Math.random() * data.length);
+      let randomIndex2 = Math.floor(Math.random() * data.length);
+      
+      
+      while (randomIndex === randomIndex1) {
+        randomIndex1 = Math.floor(Math.random() * data.length);
+      }
+      while (randomIndex === randomIndex2 || randomIndex1 === randomIndex2) {
+        randomIndex2 = Math.floor(Math.random() * data.length);
+      }  
+      randomName.innerHTML = data[randomIndex].name;
+      randomName1.innerHTML = data[randomIndex1].name;
+      randomName2.innerHTML = data[randomIndex2].name;
+    });
+}
