@@ -109,7 +109,7 @@ function displayPost() {
           ` <div class="row">
         <div class="card mb-3" style="max-width: auto;">
             <div class="card-body">
-                <h4 class="card-title"> <img src="../profile/image/user image.jpg" alt="image" height="60" width="60" class="rounded-circle"><span id="cardName">${post.username}</span>  <span style="color: #999999; font-size: medium;">@${post.username}</span> </h4>
+                <h4 class="card-title"> <img src="../profile/image/user image.jpg" alt="image" height="60" width="60" class="rounded-circle"><span id="cardName">${post.username}</span>  <span style="color: #999999; font-size: small;">posted on: ${post.createdAt}</span></h4>
                 <p class="card-text">${post.text}</p>
             </div>
             <div class="card-footer bg-transparent">
